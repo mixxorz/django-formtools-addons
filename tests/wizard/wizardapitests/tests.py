@@ -43,7 +43,7 @@ class WizardAPITests(TestCase):
             'name': 'test'
         }
         response = self.client.post(reverse('wizard_step', kwargs={'step': '0'}), data, **self.DEFAULT_HEADERS)
-        assert response.status_code == 400
+        assert response.status_code == 200
 
     def test_post_wizard_step(self):
         # Perform step 0
@@ -125,7 +125,7 @@ class WizardAPITests(TestCase):
         }
         response = self.client.post(reverse('named_wizard_step', kwargs={'step': 'page1'}), data,
                                     **self.DEFAULT_HEADERS)
-        assert response.status_code == 400
+        assert response.status_code == 200
 
     def test_post_named_wizard_step(self):
         # Perform step 0
@@ -209,7 +209,7 @@ class WizardAPITests(TestCase):
         }
         response = self.client.post(reverse('substep_wizard_step', kwargs={'step': '0|step1.1'}), data,
                                     **self.DEFAULT_HEADERS)
-        assert response.status_code == 400
+        assert response.status_code == 200
 
     def test_post_substep_wizard_step(self):
         # Perform step 0
@@ -314,7 +314,7 @@ class WizardAPITests(TestCase):
         }
         response = self.client.post(reverse('named_substep_wizard_step', kwargs={'step': 'page1|step1.1'}), data,
                                     **self.DEFAULT_HEADERS)
-        assert response.status_code == 400
+        assert response.status_code == 200
 
     def test_post_named_substep_wizard_step(self):
         # Perform step 0

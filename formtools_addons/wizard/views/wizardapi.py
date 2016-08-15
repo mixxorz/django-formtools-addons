@@ -237,7 +237,7 @@ class WizardAPIView(NamedUrlWizardView):
                 logger.error('field error: "{0}": "{1}"'.format(field, error))
 
         # Return current step_data, since the data was invalid
-        return self.render_state(step=step, form=form, form_data=form_data, form_files=form_files, status_code=400)
+        return self.render_state(step=step, form=form, form_data=form_data, form_files=form_files, status_code=200)
 
     def get_failure_redirect_view(self, request, *args, **kwargs):
         return redirect('/')
