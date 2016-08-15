@@ -231,11 +231,6 @@ class WizardAPIView(NamedUrlWizardView):
             self.storage.current_step = goto_step
             return self.render_state(step=goto_step, done=done)
 
-        # Log errors
-        for field, errors in form.errors.items():
-            for error in errors:
-                logger.error('field error: "{0}": "{1}"'.format(field, error))
-
         # Return current step_data, since the data was invalid
         return self.render_state(step=step, form=form, form_data=form_data, form_files=form_files, status_code=200)
 
