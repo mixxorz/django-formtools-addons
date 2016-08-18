@@ -197,6 +197,20 @@
     app.directive('wizard', ['$http', '$timeout', function($http, $timeout) {
         return {
             link: function($scope, elem, attrs){
+                $scope.scroll_to_top = function() {
+                    $("html,body").animate({
+                        scrollTop: elem.offset().top
+                    }, "slow");
+                };
+
+                $scope.scroll_to_sub_step = function(step) {
+                    setTimeout(function(){
+                        $("html,body").animate({
+                            scrollTop: $('.' + step).offset().top
+                        }, "slow");
+                    }, 1);
+                };
+
                 $scope._set_initial_loading = function(loading){
                     $scope.initial_loading = loading;
                 };
@@ -222,6 +236,7 @@
                         $scope.error = true;
                         $scope._set_loading(false);
                         $scope._set_initial_loading(false);
+                        $scrop.scrollToTop();
                     });
                 };
 
@@ -235,6 +250,7 @@
                     }, function(){
                         $scope._set_loading(false);
                         $scope.error = true;
+                        $scrop.scrollToTop();
                     });
 
                     return false;
@@ -250,6 +266,7 @@
                     }, function(){
                         $scope._set_loading(false);
                         $scope.error = true;
+                        $scope.scroll_to_top();
                     });
 
                     return false;
@@ -278,6 +295,7 @@
                     step = step || $scope.data.current_step.step;
                     $scope.goto(step, subStep);
 
+                    event.preventDefault();
                     return false;
                 };
 
@@ -297,8 +315,9 @@
                             $scope._set_loading(false);
                         }, function (data) {
                             $scope.error = true;
-                            $scope.handle_new_data(data);
+                            // $scope.handle_new_data(data);
                             $scope._set_loading(false);
+                            $scope.scroll_to_top();
                         });
                     };
 
@@ -358,7 +377,7 @@
                     }, function(data){
                         $scope._set_loading(false);
                         $scope.error = true;
-                        console.error(data);
+                        $scope.scroll_to_top();
                     });
                 };
 
