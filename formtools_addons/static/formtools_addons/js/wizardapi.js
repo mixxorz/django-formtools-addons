@@ -221,8 +221,23 @@
                     $scope.loading = loading;
                 };
 
+                $scope._set_loading_step = function(step){
+                    $scope.loading_step = step;
+                    console.log('>> setting loading step to: ', step);
+                };
+
+                $scope._reset_loading_step = function(){
+                    $scope.loading_step = undefined;
+                    console.log('>> resetting loading step');
+                };
+
                 $scope.is_loading = function(){
                     return $scope.loading || false;
+                };
+
+                $scope.get_loading_step = function(){
+                    console.log('>> getting loading step: ', $scope.loading_step);
+                    return $scope.loading_step;
                 };
 
                 $scope.refresh = function(){
@@ -276,6 +291,7 @@
 
                 $scope.goto = function(step, substep){
                     $scope._set_loading(true);
+                    $scope._set_loading_step(substep);
 
                     var fullStep = step;
                     if(substep){
@@ -285,9 +301,11 @@
                     promise.then(function(data){
                         $scope.handle_new_data(data);
                         // $scope._set_loading(false);
+                        $scope._reset_loading_step();
                     }, function(){
                         $scope.error = true;
                         $scope._set_loading(false);
+                        $scope._reset_loading_step();
                     });
 
                     return false;
