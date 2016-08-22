@@ -236,7 +236,7 @@
                         $scope.error = true;
                         $scope._set_loading(false);
                         $scope._set_initial_loading(false);
-                        $scrop.scrollToTop();
+                        $scope.scroll_to_top();
                     });
                 };
 
@@ -250,7 +250,7 @@
                     }, function(){
                         $scope._set_loading(false);
                         $scope.error = true;
-                        $scrop.scrollToTop();
+                        $scope.scroll_to_top();
                     });
 
                     return false;
@@ -313,6 +313,7 @@
                         promise.then(function (data) {
                             $scope.handle_new_data(data);
                             $scope._set_loading(false);
+                            $scope.scroll_to_sub_step($scope.get_current_sub_step());
                         }, function (data) {
                             $scope.error = true;
                             // $scope.handle_new_data(data);
