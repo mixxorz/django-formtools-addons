@@ -10,6 +10,7 @@ from collections import OrderedDict
 import six
 from django.core.serializers.json import DjangoJSONEncoder as JsonEncoder
 from django.forms import forms, formsets
+from django.http.request import QueryDict
 from django.http.response import JsonResponse
 from django.shortcuts import redirect
 from formtools.wizard.storage.exceptions import NoFileStorageConfigured
@@ -156,6 +157,17 @@ class WizardAPIView(NamedUrlWizardView):
 
         # is the current step the "data" name/view?
         if step_url == self.data_step_name:
+            # Retrieve data
+            query_params = request.GET.dict()
+
+            # Maybe there is a 'step' query param passed?
+            goto_step = query_params.pop('step', None)
+            if goto_step not in self.steps.all:
+                goto_step = None
+
+            # Maybe, prefilled data has been passed as GET params
+            self._prefill_data(query_params, goto_step=goto_step)
+
             done = self.is_valid()
             return self.render_state(step=self.storage.current_step, done=done)
 
@@ -359,3 +371,39 @@ class WizardAPIView(NamedUrlWizardView):
 
     def is_json_request(self, request):
         return HTTP_APPLICATION_JSON in request.META.get('HTTP_ACCEPT', '')
+
+    def _parse_prefilled(self, query_params):
+        result = {}
+
+        for param in query_params:
+            if '__' not in param:
+                continue
+
+            step, field = param.split('__')
+            if step not in result:
+                result[step] = QueryDict(mutable=True)
+            result[step][field] = query_params[param]
+
+        return result
+
+    def _prefill_data(self, query_params, goto_step=None):
+        prefilled_data = self._parse_prefilled(query_params)
+
+        if not prefilled_data:
+            return
+
+        # Change current state data
+        for step in prefilled_data:
+            form_data = prefilled_data[step]
+
+            # get the form for the current step
+            form = self.get_form(step=step, data=form_data)
+
+            # and try to validate
+            if self.is_valid(form):
+                # if the form is valid, store the cleaned data.
+                self.storage.set_step_data(step, self.process_step(form))
+
+        # Change current step
+        if goto_step is not None:
+            self.storage.current_step = goto_step
