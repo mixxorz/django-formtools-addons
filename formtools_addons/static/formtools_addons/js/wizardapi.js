@@ -223,12 +223,12 @@
 
                 $scope._set_loading_step = function(step){
                     $scope.loading_step = step;
-                    console.log('>> setting loading step to: ', step);
+                    if (verbose)console.log('>> setting loading step to: ', step);
                 };
 
                 $scope._reset_loading_step = function(){
                     $scope.loading_step = undefined;
-                    console.log('>> resetting loading step');
+                    if (verbose)console.log('>> resetting loading step');
                 };
 
                 $scope.is_loading = function(){
@@ -236,7 +236,7 @@
                 };
 
                 $scope.get_loading_step = function(){
-                    console.log('>> getting loading step: ', $scope.loading_step);
+                    if (verbose)console.log('>> getting loading step: ', $scope.loading_step);
                     return $scope.loading_step;
                 };
 
