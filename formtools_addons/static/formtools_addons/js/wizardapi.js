@@ -148,9 +148,11 @@
 
     var app = angular.module('formtools_addons.WizardApp', ['ngCookies']);
 
-    app.config(['$httpProvider', function($httpProvider){
+    app.config(['$httpProvider', '$locationProvider', function($httpProvider, $locationProvider){
         $httpProvider.defaults.xsrfCookieName = 'csrftoken';
         $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+
+        $locationProvider.html5Mode(true);
     }]);
 
     // http://stackoverflow.com/questions/17417607/angular-ng-bind-html-unsafe-and-directive-within-it
@@ -194,7 +196,7 @@
         };
     });
 
-    app.directive('wizard', ['$http', '$timeout', function($http, $timeout) {
+    app.directive('wizard', ['$http', '$timeout', '$location', function($http, $timeout, $location) {
         return {
             link: function($scope, elem, attrs){
                 $scope.scroll_to_top = function() {
@@ -227,7 +229,7 @@
                     $scope._set_loading(true);
                     $scope._set_initial_loading(true);
 
-                    var promise = $http.get(getWizardUrl('data'));
+                    var promise = $http.get(getWizardUrl('data'), {params: $location.search()});
                     promise.then(function(data){
                         $scope.handle_new_data(data);
                         // $scope._set_loading(false);
