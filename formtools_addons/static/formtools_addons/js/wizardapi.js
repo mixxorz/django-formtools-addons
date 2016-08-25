@@ -394,7 +394,6 @@
                         var next_url = data.data.next_url;
                         if(verbose)console.log('next_url:', next_url);
                         window.location = next_url;
-                        $scope._set_loading(false);
                     }, function(data){
                         $scope._set_loading(false);
                         $scope.error = true;
