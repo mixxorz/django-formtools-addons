@@ -332,8 +332,10 @@
                         var promise = $http.post(getWizardUrl(fullStepName), form_data);
                         promise.then(function (data) {
                             $scope.handle_new_data(data);
-                            $scope._set_loading(false);
-                            $scope.scroll_to_sub_step($scope.get_current_sub_step());
+                            if(!data.done || !data.valid) {
+                                $scope._set_loading(false);
+                                $scope.scroll_to_sub_step($scope.get_current_sub_step());
+                            }
                         }, function (data) {
                             $scope.error = true;
                             // $scope.handle_new_data(data);
@@ -373,7 +375,7 @@
 
                     if(data.done && data.valid){
                         $scope.handle_done(data);
-                        $scope._set_loading(false);
+                        // $scope._set_loading(false);
                         return;
                     }
 
