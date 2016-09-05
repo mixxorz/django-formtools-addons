@@ -108,6 +108,12 @@ class WizardTests(object):
         form = response.context_data['wizard']['form']
         self.assertEqual(response.context_data['form'], form)
 
+    def test_skip_step(self):
+        url = self.wizard_url+'?step=form1|Page2&form1|page1__name=Pony&form1|page1__thirsty=2&form1|page1__user=testuser1'
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['wizard']['steps'].current, 'form2')
+
     def test_form_finish(self):
         response = self.client.get(self.wizard_url)
         self.assertEqual(response.status_code, 200)
