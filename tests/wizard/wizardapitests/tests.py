@@ -540,6 +540,38 @@ class WizardAPITests(TestCase):
 
         assert response.status_code == 302
 
+    def test_skip_step(self):
+        data = {
+            'page1|step1.1': {
+                'name': 'test',
+                'thirsty': True
+            },
+            'page1|step1.2': {
+                'address1': 'Address 1',
+                'address2': 'Address 2'
+            },
+            'page1|step1.3': {
+                'random_crap': 'Blablabla'
+            }
+        }
+
+        # Create query params string
+        query_params = '?step=page2|step2.1'  # The step we want to go to
+
+        # Add "prefilled data" to query params
+        for step in data:
+            for key in data[step]:
+                value = data[step][key]
+                query_params += '&{0}__{1}={2}'.format(step, key, value)
+
+        url = reverse('complex_named_substep_wizard_step', kwargs={'step': 'data'}) + query_params
+        response = self.client.get(url, **self.DEFAULT_HEADERS)
+        assert response.status_code == 200
+
+        # Get data
+        data = self._get_response_data(response)
+        assert data['current_step'] == 'page2|step2.1'
+
     def _get_response_data(self, response):
         assert isinstance(response, JsonResponse)
         return json.loads(response.content.decode('utf-8'))
