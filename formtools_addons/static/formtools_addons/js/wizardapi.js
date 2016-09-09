@@ -249,6 +249,9 @@
                         $scope.handle_new_data(data);
                         // $scope._set_loading(false);
                         $scope._set_initial_loading(false);
+                        // if noscroll is passed via GET with value "true", force it to scroll to the first step
+                        var no_scroll = Boolean(escape(data.config.params.noscroll));
+                        if (no_scroll)$scope.scroll_to_sub_step($scope.data.structure[0][1][0]);
                     }, function(){
                         $scope.error = true;
                         $scope._set_loading(false);
