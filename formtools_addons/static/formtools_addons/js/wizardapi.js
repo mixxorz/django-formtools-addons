@@ -376,6 +376,7 @@
                     if(data.done && data.valid){
                         $scope.handle_done(data);
                         // $scope._set_loading(false);
+                        $scope.data = data;  // save scope
                         return;
                     }
 
