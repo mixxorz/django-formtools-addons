@@ -221,6 +221,10 @@
                     $scope.loading = loading;
                 };
 
+                $scope._set_ending = function(ending){
+                    $scope.ending = ending;
+                };
+
                 $scope._set_loading_step = function(step){
                     $scope.loading_step = step;
                     if (verbose)console.log('>> setting loading step to: ', step);
@@ -332,7 +336,7 @@
                         var promise = $http.post(getWizardUrl(fullStepName), form_data);
                         promise.then(function (data) {
                             $scope.handle_new_data(data);
-                            if(!data.done || !data.valid) {
+                            if(!$scope.ending) {
                                 $scope._set_loading(false);
                                 $scope.scroll_to_sub_step($scope.get_current_sub_step());
                             }
@@ -376,7 +380,7 @@
                     if(data.done && data.valid){
                         $scope.handle_done(data);
                         // $scope._set_loading(false);
-                        $scope.data = data;  // save scope
+                        // $scope.data = data;  // save scope
                         return;
                     }
 
@@ -390,6 +394,7 @@
 
                 $scope.handle_done = function(data){
                     $scope._set_loading(true);
+                    $scope._set_ending(true);
 
                     var promise = $http.post(getWizardUrl('commit'));
                     promise.then(function(data){
