@@ -394,6 +394,7 @@
                 $scope.handle_done = function(data){
                     $scope._set_loading(true);
                     $scope._set_ending(true);
+                    $scope.scroll_to_top();
 
                     var promise = $http.post(getWizardUrl('commit'));
                     promise.then(function(data){
