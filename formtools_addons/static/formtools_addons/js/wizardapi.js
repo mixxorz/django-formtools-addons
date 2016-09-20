@@ -206,11 +206,18 @@
                 };
 
                 $scope.scroll_to_sub_step = function(step) {
-                    setTimeout(function(){
+                    if (window.location.search.indexOf('noscroll') > -1){
+                        $location.search('noscroll', null);
                         $("html,body").animate({
-                            scrollTop: $('.' + step).offset().top
+                            scrollTop: $(".wizard-wrapper").offset().top
                         }, "slow");
-                    }, 1);
+                    }else{
+                        setTimeout(function () {
+                            $("html,body").animate({
+                                scrollTop: $('.' + step).offset().top
+                            }, "slow");
+                        }, 1);
+                    }
                 };
 
                 $scope._set_initial_loading = function(loading){
