@@ -1,7 +1,7 @@
 <input type="checkbox" ng-model="debug">
 <pre ng-show="debug" ng-bind="data|json"></pre>
 
-<div ng-show="!is_loading()">
+<div ng-show="!is_loading()" class="wizard-wrapper">
     <div ng-repeat="subStep in get_sub_step_names()">
         <h1 ng-bind="subStep"></h1>
         <div ng-show="is_current_sub_step(subStep)">
