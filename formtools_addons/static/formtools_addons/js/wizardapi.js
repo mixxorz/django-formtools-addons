@@ -130,12 +130,20 @@
         return data;
     };
 
+    var escapeHtml = function (html) {
+        html = html.replace(/[\[{\(\]}\)]/g, '');
+        var text = document.createTextNode(html);
+        var div = document.createElement('div');
+        div.appendChild(text);
+        return div.innerHTML;
+    };
+
     $.fn.serializeObject = function(){
         var o = {};
         var a = this.serializeArray();
         $.each(a, function() {
-            var name = escape(this.name),
-                value = escape(this.value);
+            var name = escapeHtml(this.name),
+                value = escapeHtml(this.value);
             if (o[name] !== undefined) {
                 if (!o[name].push) {
                     o[name] = [o[name]];
