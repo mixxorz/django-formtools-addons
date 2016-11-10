@@ -135,7 +135,7 @@
         var text = document.createTextNode(html);
         var div = document.createElement('div');
         div.appendChild(text);
-        return div.innerHTML;
+        return div.textContent;
     };
 
     $.fn.serializeObject = function(){
