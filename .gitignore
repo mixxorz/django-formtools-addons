@@ -51,3 +51,5 @@ docs/_build
 
 # Dev db
 dev.sqlite.db
+
+venv/*

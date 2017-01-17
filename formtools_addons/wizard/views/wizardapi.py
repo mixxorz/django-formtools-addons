@@ -249,8 +249,9 @@ class WizardAPIView(NamedUrlWizardView):
 
     def get_form_list(self):
         # Overrides wizard method to speed-up
-        if not self.cached_form_list or not self.storage.data['step_data']:
+        if not self.cached_form_list:# or not self.storage.data['step_data']:
             self.cached_form_list = super(WizardAPIView, self).get_form_list()
+
         return self.cached_form_list
 
     def get_failure_redirect_view(self, request, *args, **kwargs):
@@ -344,6 +345,7 @@ class WizardAPIView(NamedUrlWizardView):
             return form.is_valid()
 
         valid = True
+        self.cached_form_list = None
         for form_key in self.get_form_list():
             form_obj = self.get_form(step=form_key,
                                      data=self.storage.get_step_data(form_key),
