@@ -33,6 +33,7 @@ class WizardAPIView(NamedUrlWizardView):
     substep_separator = None
     json_encoder_class = None
     _json_encoder = None
+    cached_form_list = None
 
     @classmethod
     def get_initkwargs(cls, form_list=None, initial_dict=None,
@@ -245,6 +246,12 @@ class WizardAPIView(NamedUrlWizardView):
 
         # Return current step_data, since the data was invalid
         return self.render_state(step=step, form=form, form_data=form_data, form_files=form_files, status_code=200)
+
+    def get_form_list(self):
+        # Overrides wizard method to speed-up
+        if not self.cached_form_list or not self.storage.data['step_data']:
+            self.cached_form_list = super(WizardAPIView, self).get_form_list()
+        return self.cached_form_list
 
     def get_failure_redirect_view(self, request, *args, **kwargs):
         return redirect('/')
